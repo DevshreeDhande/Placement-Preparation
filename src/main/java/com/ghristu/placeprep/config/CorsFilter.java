@@ -19,8 +19,18 @@ public class CorsFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        String allowedOrigin = System.getenv("CLIENT_URL") != null ? System.getenv("CLIENT_URL") : "*";
-        res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+        String origin = req.getHeader("Origin");
+        String allowedOrigin = "https://placement-preparation-chi.vercel.app";
+
+        // If Origin is missing (direct browser link) or not matching Vercel/Localhost, block it
+        if (origin == null || !(origin.equals(allowedOrigin) || origin.startsWith("http://localhost") || origin.startsWith("http://127.0.0.1"))) {
+            res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            res.setContentType("application/json");
+            res.getWriter().write("{\"error\": \"Direct API access is forbidden. Please use the official application portal.\"}");
+            return;
+        }
+
+        res.setHeader("Access-Control-Allow-Origin", origin);
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         res.setHeader("Access-Control-Allow-Credentials", "true");
