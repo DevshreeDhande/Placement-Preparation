@@ -323,11 +323,19 @@ async function fetchCodingProblems() {
 let MOCK_TESTS = [];
 
 // ── FEEDBACK & ADMIN DATA ────────────────────────────────────────────────────
-const FEEDBACKS = [
-  { name: 'Priya Sharma', initials: 'PS', msg: 'How do I approach dynamic programming problems? I keep getting stuck on the state transitions.', time: '1h ago', cat: 'Coding Help' },
-  { name: 'Rohit Mehta', initials: 'RM', msg: 'Great platform! The TCS mock test was very close to the real pattern. Thanks to the team!', time: '3h ago', cat: 'General Feedback' },
-  { name: 'Anjali Patel', initials: 'AP', msg: 'Can someone explain the difference between clustered and non-clustered indexes in SQL?', time: '1d ago', cat: 'Technical Question' },
-];
+let FEEDBACKS = [];
+
+async function fetchFeedbacks() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/feedback`);
+    if (res.ok) {
+      FEEDBACKS = await res.json();
+      renderFeedback();
+    }
+  } catch (e) {
+    console.error('Failed to fetch feedbacks:', e);
+  }
+}
 
 const ADMIN_USERS = [
   { name: 'Priya Sharma', email: 'priya.sharma.cre@ghristu.edu.in', role: 'student', status: 'active', branch: 'CSE', score: 82 },
@@ -583,7 +591,19 @@ async function fetchDrives() {
 }
 
 // ── ADDED QUESTIONS STORE ────────────────────────────────────────────────────
-const ADDED_QUESTIONS = [];
+let ADDED_QUESTIONS = [];
+
+async function fetchAddedQuestions() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/questions`);
+    if (res.ok) {
+      ADDED_QUESTIONS = await res.json();
+      renderAll();
+    }
+  } catch (e) {
+    console.error('Failed to fetch added questions:', e);
+  }
+}
 let CREATED_ASSESSMENTS = [];
 
 // ── RENDER ALL ────────────────────────────────────────────────────────────────
@@ -923,7 +943,7 @@ function toggleQuestionForm() {
   if (card) card.style.display = card.style.display === 'none' ? 'block' : 'none';
 }
 
-function addNewQuestion() {
+async function addNewQuestion() {
   const question = document.getElementById('q-text')?.value;
   const category = document.getElementById('q-category')?.value;
   const difficulty = document.getElementById('q-difficulty')?.value;
@@ -936,14 +956,21 @@ function addNewQuestion() {
 
   if (!question || !optA || !optB) { showToast('Please fill the question and at least 2 options'); return; }
 
-  ADDED_QUESTIONS.push({
-    question, category, difficulty,
-    options: [optA, optB, optC, optD].filter(Boolean),
-    correct, explanation
-  });
-
-  showToast('Question added to ' + category + ' ✅');
-  renderAll();
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/questions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, category, difficulty, optA, optB, optC, optD, correct, explanation })
+    });
+    if (res.ok) {
+      showToast('Question added to ' + category + ' ✅');
+      await fetchAddedQuestions();
+    } else {
+      showToast('Failed to add question');
+    }
+  } catch (e) {
+    showToast('Error adding question');
+  }
 }
 
 function exportStudentCSV() {
@@ -2145,18 +2172,28 @@ function renderFeedback() {
   `).join('');
 }
 
-function submitFeedback() {
+async function submitFeedback() {
   const cat = document.getElementById('fb-cat').value;
   const msg = document.getElementById('fb-msg').value.trim();
   if (!msg) { showToast('Please write a message first.'); return; }
-  FEEDBACKS.unshift({
-    name: currentUser ? currentUser.name : 'Anonymous',
-    initials: currentUser ? currentUser.name.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase() : 'AN',
-    msg, time: 'Just now', cat
-  });
-  renderFeedback();
-  document.getElementById('fb-msg').value = '';
-  showToast('Submitted! Our team will respond shortly 👍');
+
+  const userId = currentUser ? currentUser.id : 0;
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, category: cat, message: msg })
+    });
+    if (res.ok) {
+      document.getElementById('fb-msg').value = '';
+      showToast('Submitted! Our team will respond shortly 👍');
+      await fetchFeedbacks();
+    } else {
+      showToast('Failed to submit feedback');
+    }
+  } catch (e) {
+    showToast('Error submitting feedback');
+  }
 }
 
 // ── ADMIN ────────────────────────────────────────────────────────────────────
@@ -2375,6 +2412,8 @@ document.addEventListener('DOMContentLoaded', function () {
   fetchDrives();
   fetchCodingProblems();
   fetchCreatedAssessments();
+  fetchFeedbacks();
+  fetchAddedQuestions();
 
   // Practice modal close on ESC
   document.addEventListener('keydown', (e) => {
