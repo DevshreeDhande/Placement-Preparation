@@ -27,32 +27,52 @@ public class AuthServlet extends HttpServlet {
         Map<String, String> payload = gson.fromJson(body, Map.class);
         Map<String, Object> res = new HashMap<>();
 
+        com.ghristu.placeprep.dao.UserDAO userDAO = new com.ghristu.placeprep.dao.UserDAO();
+
         if ("/login".equals(pathInfo)) {
             String email = payload.get("email");
             String password = payload.get("password");
             
-            // Dummy authentication Logic
-            if (email != null && !email.isEmpty() && password != null) {
-                // Determine mock role based on email suffix or random logic
-                String role = email.contains("coordinator") ? "coordinator" : (email.contains("recruiter") ? "recruiter" : "student");
+            if (email != null && password != null && userDAO.validateUser(email, password)) {
+                Map<String, Object> userDetails = userDAO.getUserByEmail(email);
+                String role = (String) userDetails.get("role");
                 
                 // Create session
                 HttpSession session = request.getSession(true);
                 session.setAttribute("user", email);
                 session.setAttribute("role", role);
 
-                Map<String, String> userMap = new HashMap<>();
-                userMap.put("email", email);
-                userMap.put("name", email.split("@")[0]);
-                userMap.put("role", role);
-
                 res.put("success", true);
                 res.put("message", "Login successful");
-                res.put("user", userMap);
+                res.put("user", userDetails);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 res.put("success", false);
                 res.put("message", "Invalid credentials");
+            }
+        } else if ("/register".equals(pathInfo)) {
+            String email = payload.get("email");
+            String name = payload.get("name");
+            String role = payload.get("role");
+            String password = payload.get("password");
+            
+            if (userDAO.getUserByEmail(email) != null) {
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                res.put("success", false);
+                res.put("message", "Email already exists");
+            } else if (userDAO.registerUser(email, name, role, password)) {
+                res.put("success", true);
+                res.put("message", "Registration successful");
+                Map<String, Object> userDetails = userDAO.getUserByEmail(email);
+                
+                HttpSession session = request.getSession(true);
+                session.setAttribute("user", email);
+                session.setAttribute("role", role);
+                res.put("user", userDetails);
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                res.put("success", false);
+                res.put("message", "Failed to register user");
             }
         } else if ("/logout".equals(pathInfo)) {
             HttpSession session = request.getSession(false);

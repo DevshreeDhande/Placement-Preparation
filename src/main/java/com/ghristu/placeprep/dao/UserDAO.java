@@ -35,7 +35,6 @@ public class UserDAO {
     }
 
     public boolean validateUser(String email, String plaintextPassword) {
-        // Implementation would use BCrypt to check stored hash from db
         String query = "SELECT password_hash FROM users WHERE email = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
@@ -45,13 +44,31 @@ public class UserDAO {
             
             if (rs.next()) {
                 String storedHash = rs.getString("password_hash");
-                // For demonstration, we compare plaintext if not hashed, or use BCrypt
-                // return org.mindrot.jbcrypt.BCrypt.checkpw(plaintextPassword, storedHash);
-                return true; 
+                return org.mindrot.jbcrypt.BCrypt.checkpw(plaintextPassword, storedHash);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // Authentication failed
+        return false;
+    }
+
+    public boolean registerUser(String email, String name, String role, String plaintextPassword) {
+        String query = "INSERT INTO users (full_name, email, role, password_hash) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            
+            String hashed = org.mindrot.jbcrypt.BCrypt.hashpw(plaintextPassword, org.mindrot.jbcrypt.BCrypt.gensalt(12));
+            
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, role);
+            ps.setString(4, hashed);
+            
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

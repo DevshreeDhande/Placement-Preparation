@@ -399,7 +399,7 @@ function switchTab(tab) {
   document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
 }
 
-function handleLogin() {
+async function handleLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value.trim();
   const err = document.getElementById('login-error');
@@ -412,22 +412,38 @@ function handleLogin() {
   if (!pass) { err.style.display = 'block'; err.textContent = 'Please enter your password.'; return; }
 
   err.style.display = 'none';
+  const btn = document.querySelector('#login-form button');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = 'Signing in...';
+  btn.disabled = true;
 
-  let role = 'student';
-  if (email.includes('admin') || email.includes('coordinator')) role = 'coordinator';
-  else if (email.includes('hr') || email.includes('recruit')) role = 'recruiter';
-
-  const nameParts = email.split('@')[0].split('.');
-  const name = nameParts.slice(0, 2).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
-
-  currentUser = { email, name, role };
-  sessionStorage.setItem('ghristu_user', JSON.stringify(currentUser));
-
-  // Role-based redirect
-  window.location.href = 'pages/Dashboard.html';
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      currentUser = data.user;
+      sessionStorage.setItem('ghristu_user', JSON.stringify(currentUser));
+      window.location.href = 'pages/Dashboard.html';
+    } else {
+      err.style.display = 'block';
+      err.textContent = data.message || 'Invalid credentials';
+    }
+  } catch (e) {
+    err.style.display = 'block';
+    err.textContent = 'Server error. Please try again later.';
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
 }
 
-function handleRegister() {
+async function handleRegister() {
   const email = document.getElementById('reg-email').value.trim();
   const name = document.getElementById('reg-name').value.trim();
   const role = document.getElementById('reg-role').value;
@@ -436,15 +452,42 @@ function handleRegister() {
 
   if (!email.endsWith(ALLOWED_DOMAIN)) {
     err.style.display = 'block';
+    err.textContent = '🚫 Access denied. Only @ghristu.edu.in emails are allowed.';
     return;
   }
   if (!name || !pass) { err.style.display = 'block'; err.textContent = 'Please fill all fields.'; return; }
 
   err.style.display = 'none';
-  currentUser = { email, name, role };
-  sessionStorage.setItem('ghristu_user', JSON.stringify(currentUser));
-  sessionStorage.setItem('ghristu_toast', 'Account created! Welcome to PlacePrep 🎉');
-  window.location.href = 'pages/Dashboard.html';
+  const btn = document.querySelector('#register-form button');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = 'Registering...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name, role, password: pass })
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      currentUser = data.user;
+      sessionStorage.setItem('ghristu_user', JSON.stringify(currentUser));
+      sessionStorage.setItem('ghristu_toast', 'Account created! Welcome to PlacePrep 🎉');
+      window.location.href = 'pages/Dashboard.html';
+    } else {
+      err.style.display = 'block';
+      err.textContent = data.message || 'Registration failed';
+    }
+  } catch (e) {
+    err.style.display = 'block';
+    err.textContent = 'Server error. Please try again later.';
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
 }
 
 function handleLogout() {
