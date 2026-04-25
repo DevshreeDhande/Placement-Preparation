@@ -28,12 +28,75 @@ public class CompanyDAO {
                 c.put("icon", rs.getString("icon"));
                 c.put("ctc", rs.getString("ctc"));
                 c.put("openings", rs.getInt("openings"));
-                // Additional roadmap fetches would happen here
+                c.put("tags", new String[]{rs.getString("type")}); // Basic tags array
+                
+                // Fetch Roadmap
+                String roadmapQuery = "SELECT overview, process_steps, duration_weeks, key_topics, interview_tips FROM roadmaps WHERE company_id = ?";
+                try (PreparedStatement roadmapPs = conn.prepareStatement(roadmapQuery)) {
+                    roadmapPs.setInt(1, rs.getInt("id"));
+                    ResultSet roadmapRs = roadmapPs.executeQuery();
+                    if (roadmapRs.next()) {
+                        Map<String, Object> roadmap = new HashMap<>();
+                        roadmap.put("overview", roadmapRs.getString("overview"));
+                        roadmap.put("process", roadmapRs.getString("process_steps"));
+                        
+                        String weeksRaw = roadmapRs.getString("duration_weeks");
+                        roadmap.put("weeks", weeksRaw != null ? weeksRaw.split("\\|") : new String[0]);
+                        
+                        String topicsRaw = roadmapRs.getString("key_topics");
+                        roadmap.put("topics", topicsRaw != null ? topicsRaw.split(",") : new String[0]);
+                        
+                        String tipsRaw = roadmapRs.getString("interview_tips");
+                        roadmap.put("tips", tipsRaw != null ? tipsRaw.split("\\|") : new String[0]);
+                        
+                        c.put("roadmap", roadmap);
+                    }
+                }
                 companies.add(c);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return companies;
+    }
+
+    public boolean addCompany(String name, String type, String icon, String ctc, int openings, String overview, String process, String duration, String topics, String tips) {
+        String insertCompany = "INSERT INTO companies (name, type, icon, ctc, openings) VALUES (?, ?, ?, ?, ?) RETURNING id";
+        String insertRoadmap = "INSERT INTO roadmaps (company_id, overview, process_steps, duration_weeks, key_topics, interview_tips) VALUES (?, ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false); // Transaction block
+            
+            try (PreparedStatement psCompany = conn.prepareStatement(insertCompany)) {
+                psCompany.setString(1, name);
+                psCompany.setString(2, type);
+                psCompany.setString(3, icon);
+                psCompany.setString(4, ctc);
+                psCompany.setInt(5, openings);
+                
+                ResultSet rs = psCompany.executeQuery();
+                if (rs.next()) {
+                    int companyId = rs.getInt(1);
+                    
+                    try (PreparedStatement psRoadmap = conn.prepareStatement(insertRoadmap)) {
+                        psRoadmap.setInt(1, companyId);
+                        psRoadmap.setString(2, overview);
+                        psRoadmap.setString(3, process);
+                        psRoadmap.setString(4, duration);
+                        psRoadmap.setString(5, topics);
+                        psRoadmap.setString(6, tips);
+                        psRoadmap.executeUpdate();
+                    }
+                    conn.commit();
+                    return true;
+                }
+            } catch (SQLException ex) {
+                conn.rollback();
+                ex.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

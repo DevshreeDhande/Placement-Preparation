@@ -18,61 +18,67 @@ public class CompanyServlet extends HttpServlet {
 
     private Gson gson = new Gson();
 
+    private com.ghristu.placeprep.dao.CompanyDAO companyDAO = new com.ghristu.placeprep.dao.CompanyDAO();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        // Temporary Mock Data Generation for the API
-        List<Map<String, Object>> companies = new ArrayList<>();
+        List<Map<String, Object>> companies = companyDAO.getAllCompanies();
         
-        Map<String, Object> tcs = new HashMap<>();
-        tcs.put("name", "TCS");
-        tcs.put("type", "tech");
-        tcs.put("icon", "🔵");
-        tcs.put("tags", new String[]{"tech", "product"});
-        tcs.put("ctc", "3.5–6 LPA");
-        tcs.put("openings", 120);
-        
-        Map<String, Object> tcsRoadmap = new HashMap<>();
-        tcsRoadmap.put("overview", "Tata Consultancy Services is India's largest IT services company.");
-        tcsRoadmap.put("process", "Online Test (NQT) → Technical Interview → Managerial Interview → HR Round");
-        tcsRoadmap.put("weeks", new String[]{
-            "Week 1-2: Focus on Quantitative Aptitude",
-            "Week 3-4: Verbal Ability",
-            "Week 5-6: Programming Logic",
-            "Week 7-8: Coding practice",
-            "Week 9-10: Mock NQTs"
-        });
-        tcsRoadmap.put("topics", new String[]{"Quantitative Aptitude", "Verbal Ability", "Programming Logic", "Java/Python Basics"});
-        tcsRoadmap.put("tips", new String[]{"TCS NQT has a strict timer", "Focus on accuracy"});
-        tcs.put("roadmap", tcsRoadmap);
-        companies.add(tcs);
-
-        Map<String, Object> amz = new HashMap<>();
-        amz.put("name", "Amazon");
-        amz.put("type", "product");
-        amz.put("icon", "🛒");
-        amz.put("tags", new String[]{"tech", "product"});
-        amz.put("ctc", "25–45 LPA");
-        amz.put("openings", 80);
-        
-        Map<String, Object> amzRoadmap = new HashMap<>();
-        amzRoadmap.put("overview", "Amazon is one of the highest-paying recruiters on campus.");
-        amzRoadmap.put("process", "Online Assessment (2 coding) → Phone Screen → Onsite (4 rounds)");
-        amzRoadmap.put("weeks", new String[]{
-            "Week 1-3: Data Structures deep dive",
-            "Week 4-6: Algorithm patterns",
-            "Week 7-8: System design basics",
-            "Week 9: Amazon Leadership Principles"
-        });
-        amzRoadmap.put("topics", new String[]{"Arrays", "Trees & Graphs", "System Design", "Leadership Principles"});
-        amzRoadmap.put("tips", new String[]{"Every interview includes behavioral questions", "LeetCode medium is the sweet spot"});
-        amz.put("roadmap", amzRoadmap);
-        companies.add(amz);
-
         PrintWriter out = response.getWriter();
         out.print(gson.toJson(companies));
+        out.flush();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = request.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            buffer.append(line);
+        }
+        
+        Map<String, Object> payload = gson.fromJson(buffer.toString(), Map.class);
+        Map<String, Object> res = new HashMap<>();
+        
+        try {
+            String name = (String) payload.get("name");
+            String type = (String) payload.get("type");
+            String icon = (String) payload.get("icon");
+            String ctc = (String) payload.get("ctc");
+            int openings = ((Double) payload.get("openings")).intValue(); // Gson parses numbers as Double
+            
+            // Roadmap parts
+            String overview = (String) payload.get("overview");
+            String process = (String) payload.get("process");
+            String duration = (String) payload.get("duration");
+            String topics = (String) payload.get("topics");
+            String tips = (String) payload.get("tips");
+            
+            boolean success = companyDAO.addCompany(name, type, icon, ctc, openings, overview, process, duration, topics, tips);
+            
+            if (success) {
+                res.put("success", true);
+                res.put("message", "Company and Roadmap added successfully");
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                res.put("success", false);
+                res.put("message", "Database error occurred");
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            res.put("success", false);
+            res.put("message", "Invalid payload format");
+        }
+        
+        PrintWriter out = response.getWriter();
+        out.print(gson.toJson(res));
         out.flush();
     }
 }
