@@ -125,6 +125,16 @@
         <url-pattern>/api/resume/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Drive Servlet -->
+    <servlet>
+        <servlet-name>DriveServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.DriveServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DriveServlet</servlet-name>
+        <url-pattern>/api/drives/*</url-pattern>
+    </servlet-mapping>
+
     <!-- Session config -->
     <session-config>
         <session-timeout>60</session-timeout>

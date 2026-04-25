@@ -600,13 +600,19 @@ function initSidebar() {
 }
 
 // ── SCHEDULED DRIVES DATA ────────────────────────────────────────────────────
-const SCHEDULED_DRIVES = [
-  { company:'TCS', date:'2025-08-15', type:'tech', roles:'SDE, Analyst', ctc:'7 LPA', status:'confirmed' },
-  { company:'Infosys', date:'2025-08-22', type:'tech', roles:'Systems Engineer', ctc:'5.5 LPA', status:'confirmed' },
-  { company:'Wipro', date:'2025-09-01', type:'tech', roles:'Project Engineer', ctc:'5 LPA', status:'pending' },
-  { company:'Accenture', date:'2025-09-10', type:'tech', roles:'ASE, Analyst', ctc:'6.5 LPA', status:'confirmed' },
-  { company:'Goldman Sachs', date:'2025-09-20', type:'finance', roles:'SDE, Risk Analyst', ctc:'18 LPA', status:'pending' },
-];
+let SCHEDULED_DRIVES = [];
+
+async function fetchDrives() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/drives`);
+    if (res.ok) {
+      SCHEDULED_DRIVES = await res.json();
+      renderAll();
+    }
+  } catch (e) {
+    console.error("Failed to fetch drives:", e);
+  }
+}
 
 // ── ADDED QUESTIONS STORE ────────────────────────────────────────────────────
 const ADDED_QUESTIONS = [];
@@ -886,7 +892,7 @@ function toggleDriveForm() {
 function renderDrivesTable() {
   const tbody = document.getElementById('drives-table-body');
   if (!tbody) return;
-  tbody.innerHTML = SCHEDULED_DRIVES.map((d, i) => `
+  tbody.innerHTML = SCHEDULED_DRIVES.map((d) => `
     <tr>
       <td><strong>${d.company}</strong></td>
       <td>${d.date}</td>
@@ -894,21 +900,54 @@ function renderDrivesTable() {
       <td>${d.roles}</td>
       <td><strong>${d.ctc}</strong></td>
       <td><span class="test-status status-${d.status === 'confirmed' ? 'done' : 'new'}">${capitalize(d.status)}</span></td>
-      <td><button class="btn-sm" onclick="SCHEDULED_DRIVES.splice(${i},1);renderAll();showToast('Drive removed')">✕</button></td>
+      <td><button class="btn-sm" onclick="deleteDrive(${d.id})">✕</button></td>
     </tr>
   `).join('');
 }
 
-function addNewDrive() {
+async function addNewDrive() {
   const company = document.getElementById('drive-company')?.value;
   const date = document.getElementById('drive-date')?.value;
   const roles = document.getElementById('drive-roles')?.value;
   const ctc = document.getElementById('drive-ctc')?.value;
   const type = document.getElementById('drive-type')?.value;
   if (!company || !date) { showToast('Please fill company name and date'); return; }
-  SCHEDULED_DRIVES.push({ company, date, type: type||'tech', roles: roles||'TBD', ctc: ctc||'TBD', status:'pending' });
-  showToast('Drive scheduled for ' + company + ' ✅');
-  renderAll();
+  
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/drives`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ company, date, roles: roles||'TBD', ctc: ctc||'TBD', type: type||'tech' })
+    });
+    
+    if (res.ok) {
+      showToast('Drive scheduled for ' + company + ' ✅');
+      document.getElementById('drive-company').value = '';
+      document.getElementById('drive-date').value = '';
+      document.getElementById('drive-roles').value = '';
+      document.getElementById('drive-ctc').value = '';
+      await fetchDrives(); // Refresh data
+    } else {
+      showToast('Failed to schedule drive');
+    }
+  } catch (e) {
+    showToast('Error connecting to server');
+  }
+}
+
+async function deleteDrive(id) {
+  if (!confirm('Are you sure you want to delete this drive?')) return;
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/drives/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      showToast('Drive removed');
+      await fetchDrives();
+    } else {
+      showToast('Failed to remove drive');
+    }
+  } catch (e) {
+    showToast('Error connecting to server');
+  }
 }
 
 function toggleQuestionForm() {
@@ -2315,6 +2354,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initSidebar();
   initCompanyModal();
   fetchCompanies();
+  fetchDrives();
 
   // Practice modal close on ESC
   document.addEventListener('keydown', (e) => {

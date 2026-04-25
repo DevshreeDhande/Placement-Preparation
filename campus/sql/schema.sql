@@ -191,3 +191,15 @@ CREATE TABLE IF NOT EXISTS daily_activity (
 );
 
 CREATE INDEX idx_daily_user ON daily_activity(user_id);
+
+-- ── PLACEMENT DRIVES ─────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS placement_drives (
+    id              SERIAL PRIMARY KEY,
+    company_name    VARCHAR(255) NOT NULL,
+    drive_date      DATE NOT NULL,
+    type            VARCHAR(100),
+    roles           VARCHAR(255),
+    ctc             VARCHAR(100),
+    status          VARCHAR(50) DEFAULT 'pending',
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
