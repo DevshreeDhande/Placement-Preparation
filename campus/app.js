@@ -305,40 +305,20 @@ const TECHNICAL_QUESTIONS = {
 };
 
 // ── CODING PROBLEMS ──────────────────────────────────────────────────────────
-const CODING_PROBLEMS = [
-  { title: 'Two Sum', difficulty: 'Easy', tags: ['Arrays', 'HashMap'], solved: true },
-  { title: 'Valid Parentheses', difficulty: 'Easy', tags: ['Strings', 'Stack'], solved: true },
-  { title: 'Reverse Linked List', difficulty: 'Easy', tags: ['Linked List'], solved: true },
-  { title: 'Maximum Subarray (Kadane\'s)', difficulty: 'Easy', tags: ['Arrays', 'DP'], solved: true },
-  { title: 'Merge Two Sorted Lists', difficulty: 'Easy', tags: ['Linked List'], solved: false },
-  { title: 'Best Time to Buy and Sell Stock', difficulty: 'Easy', tags: ['Arrays', 'Greedy'], solved: true },
-  { title: 'Climbing Stairs', difficulty: 'Easy', tags: ['DP', 'Math'], solved: false },
-  { title: 'Symmetric Tree', difficulty: 'Easy', tags: ['Trees', 'BFS'], solved: false },
-  { title: 'Longest Common Subsequence', difficulty: 'Medium', tags: ['DP', 'Strings'], solved: true },
-  { title: 'Binary Tree Level Order Traversal', difficulty: 'Medium', tags: ['Trees', 'BFS'], solved: false },
-  { title: '3Sum', difficulty: 'Medium', tags: ['Arrays', 'Two Pointers'], solved: false },
-  { title: 'Merge Intervals', difficulty: 'Medium', tags: ['Arrays', 'Sorting'], solved: false },
-  { title: 'Binary Tree Diameter', difficulty: 'Medium', tags: ['Trees', 'DFS'], solved: false },
-  { title: 'Group Anagrams', difficulty: 'Medium', tags: ['Strings', 'HashMap'], solved: false },
-  { title: 'Coin Change', difficulty: 'Medium', tags: ['DP'], solved: false },
-  { title: 'Rotate Image', difficulty: 'Medium', tags: ['Arrays', 'Matrix'], solved: false },
-  { title: 'Search in Rotated Sorted Array', difficulty: 'Medium', tags: ['Arrays', 'Binary Search'], solved: true },
-  { title: 'Number of Islands', difficulty: 'Medium', tags: ['Graphs', 'DFS'], solved: false },
-  { title: 'LRU Cache', difficulty: 'Medium', tags: ['Design', 'HashMap'], solved: false },
-  { title: 'Course Schedule', difficulty: 'Medium', tags: ['Graphs', 'Topological Sort'], solved: false },
-  { title: 'Longest Palindromic Substring', difficulty: 'Medium', tags: ['Strings', 'DP'], solved: false },
-  { title: 'Container With Most Water', difficulty: 'Medium', tags: ['Arrays', 'Two Pointers'], solved: false },
-  { title: 'Word Break', difficulty: 'Medium', tags: ['DP', 'Strings'], solved: false },
-  { title: 'Word Ladder', difficulty: 'Hard', tags: ['Graphs', 'BFS'], solved: false },
-  { title: 'Median of Two Sorted Arrays', difficulty: 'Hard', tags: ['Arrays', 'Binary Search'], solved: false },
-  { title: 'Trapping Rain Water', difficulty: 'Hard', tags: ['Arrays', 'Stack', 'Two Pointers'], solved: false },
-  { title: 'N-Queens', difficulty: 'Hard', tags: ['Backtracking'], solved: false },
-  { title: 'Serialize and Deserialize Binary Tree', difficulty: 'Hard', tags: ['Trees', 'Design'], solved: false },
-  { title: 'Merge K Sorted Lists', difficulty: 'Hard', tags: ['Linked List', 'Heap'], solved: false },
-  { title: 'Graph Coloring', difficulty: 'Hard', tags: ['Graphs', 'Backtracking'], solved: false },
-  { title: 'Longest Valid Parentheses', difficulty: 'Hard', tags: ['Strings', 'DP', 'Stack'], solved: false },
-  { title: 'Minimum Window Substring', difficulty: 'Hard', tags: ['Strings', 'Sliding Window'], solved: false },
-];
+let CODING_PROBLEMS = [];
+
+async function fetchCodingProblems() {
+  const userId = currentUser ? currentUser.id : 0;
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/coding?userId=${userId}`);
+    if (res.ok) {
+      CODING_PROBLEMS = await res.json();
+      renderAll();
+    }
+  } catch (e) {
+    console.error("Failed to fetch coding problems:", e);
+  }
+}
 
 // ── MOCK TESTS ───────────────────────────────────────────────────────────────
 const MOCK_TESTS = [
@@ -2097,18 +2077,40 @@ function openCodingProblem(idx) {
   `;
 }
 
-function markCodingSolved(idx) {
-  CODING_PROBLEMS[idx].solved = true;
-  renderCoding();
-  closePractice();
-  showToast('Marked as solved! Great job 🎉');
+async function markCodingSolved(idx) {
+  const p = CODING_PROBLEMS[idx];
+  if(!currentUser) { showToast('Please log in first'); return; }
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/coding`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: currentUser.id, problemId: p.id, solved: true })
+    });
+    if(res.ok) {
+      CODING_PROBLEMS[idx].solved = true;
+      renderCoding();
+      closePractice();
+      showToast('Marked as solved! Great job 🎉');
+    }
+  } catch(e) { showToast('Error saving progress'); }
 }
 
-function markCodingUnsolved(idx) {
-  CODING_PROBLEMS[idx].solved = false;
-  renderCoding();
-  closePractice();
-  showToast('Marked as unsolved for review');
+async function markCodingUnsolved(idx) {
+  const p = CODING_PROBLEMS[idx];
+  if(!currentUser) return;
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/coding`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: currentUser.id, problemId: p.id, solved: false })
+    });
+    if(res.ok) {
+      CODING_PROBLEMS[idx].solved = false;
+      renderCoding();
+      closePractice();
+      showToast('Marked as unsolved for review');
+    }
+  } catch(e) { showToast('Error saving progress'); }
 }
 
 // ── FEEDBACK ─────────────────────────────────────────────────────────────────
@@ -2355,6 +2357,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initCompanyModal();
   fetchCompanies();
   fetchDrives();
+  fetchCodingProblems();
 
   // Practice modal close on ESC
   document.addEventListener('keydown', (e) => {

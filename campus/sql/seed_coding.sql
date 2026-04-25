@@ -1,0 +1,37 @@
+-- Insert coding problems
+INSERT INTO coding_problems (id, title, difficulty, tags, link) VALUES
+(1, 'Two Sum', 'Easy', 'Arrays,HashMap', '#'),
+(2, 'Valid Parentheses', 'Easy', 'Strings,Stack', '#'),
+(3, 'Reverse Linked List', 'Easy', 'Linked List', '#'),
+(4, 'Maximum Subarray (Kadane''s)', 'Easy', 'Arrays,DP', '#'),
+(5, 'Merge Two Sorted Lists', 'Easy', 'Linked List', '#'),
+(6, 'Best Time to Buy and Sell Stock', 'Easy', 'Arrays,Greedy', '#'),
+(7, 'Climbing Stairs', 'Easy', 'DP,Math', '#'),
+(8, 'Symmetric Tree', 'Easy', 'Trees,BFS', '#'),
+(9, 'Longest Common Subsequence', 'Medium', 'DP,Strings', '#'),
+(10, 'Binary Tree Level Order Traversal', 'Medium', 'Trees,BFS', '#'),
+(11, '3Sum', 'Medium', 'Arrays,Two Pointers', '#'),
+(12, 'Merge Intervals', 'Medium', 'Arrays,Sorting', '#'),
+(13, 'Binary Tree Diameter', 'Medium', 'Trees,DFS', '#'),
+(14, 'Group Anagrams', 'Medium', 'Strings,HashMap', '#'),
+(15, 'Coin Change', 'Medium', 'DP', '#'),
+(16, 'Rotate Image', 'Medium', 'Arrays,Matrix', '#'),
+(17, 'Search in Rotated Sorted Array', 'Medium', 'Arrays,Binary Search', '#'),
+(18, 'Number of Islands', 'Medium', 'Graphs,DFS', '#'),
+(19, 'LRU Cache', 'Medium', 'Design,HashMap', '#'),
+(20, 'Course Schedule', 'Medium', 'Graphs,Topological Sort', '#'),
+(21, 'Longest Palindromic Substring', 'Medium', 'Strings,DP', '#'),
+(22, 'Container With Most Water', 'Medium', 'Arrays,Two Pointers', '#'),
+(23, 'Word Break', 'Medium', 'DP,Strings', '#'),
+(24, 'Word Ladder', 'Hard', 'Graphs,BFS', '#'),
+(25, 'Median of Two Sorted Arrays', 'Hard', 'Arrays,Binary Search', '#'),
+(26, 'Trapping Rain Water', 'Hard', 'Arrays,Stack,Two Pointers', '#'),
+(27, 'N-Queens', 'Hard', 'Backtracking', '#'),
+(28, 'Serialize and Deserialize Binary Tree', 'Hard', 'Trees,Design', '#'),
+(29, 'Merge K Sorted Lists', 'Hard', 'Linked List,Heap', '#'),
+(30, 'Graph Coloring', 'Hard', 'Graphs,Backtracking', '#'),
+(31, 'Longest Valid Parentheses', 'Hard', 'Strings,DP,Stack', '#'),
+(32, 'Minimum Window Substring', 'Hard', 'Strings,Sliding Window', '#');
+
+-- Update sequence for coding_problems id
+SELECT setval('coding_problems_id_seq', (SELECT MAX(id) FROM coding_problems));
