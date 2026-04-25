@@ -18,7 +18,7 @@ public class MockTestDAO {
                        "COALESCE(t.status, 'new') as status, t.score, TO_CHAR(m.created_at, 'YYYY-MM-DD') as date " +
                        "FROM mock_tests m " +
                        "LEFT JOIN test_attempts t ON m.id = t.test_id AND t.user_id = ? " +
-                       "ORDER BY m.id ASC";
+                       "ORDER BY m.id DESC";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
