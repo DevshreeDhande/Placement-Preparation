@@ -292,7 +292,7 @@ const TECHNICAL_QUESTIONS = {
     moderate: Array.from({ length: 10 }, () => ({ q: 'Cloud/DevOps concept question.', options: ['A', 'B', 'C', 'D'], correct: Math.floor(Math.random() * 4), formula: 'Cloud & DevOps', explanation: 'Core DevOps concept.', steps: ['Apply DevOps fundamentals'] })),
     hard: Array.from({ length: 20 }, () => ({ q: 'Advanced Cloud/DevOps question.', options: ['A', 'B', 'C', 'D'], correct: Math.floor(Math.random() * 4), formula: 'Advanced Cloud', explanation: 'Requires deep cloud knowledge.', steps: ['Analyze carefully'] }))
   },
-  'OOP Concepts': {
+'OOP Concepts': {
     beginner: [
       { q: 'What are the four pillars of OOP?', options: ['Arrays, Functions, Loops, Variables', 'Encapsulation, Inheritance, Polymorphism, Abstraction', 'Classes, Objects, Methods, Properties', 'Input, Process, Output, Storage'], correct: 1, formula: 'OOP Fundamentals', explanation: 'The four pillars: Encapsulation (data hiding), Inheritance (code reuse), Polymorphism (many forms), Abstraction (hiding complexity).', steps: ['Encapsulation: bundling data + methods', 'Inheritance: child inherits from parent', 'Polymorphism: same method, different behavior', 'Abstraction: hiding implementation details'] },
       { q: 'What is inheritance in OOP?', options: ['Creating multiple objects', 'A mechanism where one class acquires properties of another', 'Hiding data', 'Method overloading'], correct: 1, formula: 'Inheritance', explanation: 'Inheritance allows a class (child) to inherit fields and methods from another class (parent), promoting code reuse.', steps: ['Parent/Super class provides base functionality', 'Child/Sub class extends parent class', 'Child inherits all non-private members', 'Child can override parent methods'] },
@@ -320,19 +320,7 @@ async function fetchCodingProblems() {
   }
 }
 
-// ── MOCK TESTS ───────────────────────────────────────────────────────────────
-const MOCK_TESTS = [
-  { name: 'TCS NQT Full Mock – 2025', icon: '🔵', time: '120 min', questions: 100, status: 'new', difficulty: 'medium', category: 'company', desc: 'Complete NQT simulation with Aptitude, Reasoning, Verbal, and Coding sections.' },
-  { name: 'Infosys Aptitude Test', icon: '🟢', time: '90 min', questions: 80, status: 'done', score: 82, difficulty: 'medium', category: 'company', desc: 'Quantitative, Logical Reasoning, and Verbal sections based on Infosys pattern.' },
-  { name: 'Wipro WILP Assessment', icon: '⚙️', time: '75 min', questions: 70, status: 'new', difficulty: 'easy', category: 'company', desc: 'Assessment covering aptitude and basic programming for WILP program.' },
-  { name: 'Accenture Cognitive Test', icon: '🔷', time: '60 min', questions: 50, status: 'missed', difficulty: 'medium', category: 'company', desc: 'Cognitive ability, technical MCQs, and communication assessment.' },
-  { name: 'Capgemini Game-Based Test', icon: '🚀', time: '45 min', questions: 40, status: 'new', difficulty: 'easy', category: 'company', desc: 'Game-based aptitude and pseudo-code assessment.' },
-  { name: 'Full Stack DSA Marathon', icon: '🔥', time: '180 min', questions: 50, status: 'new', difficulty: 'hard', category: 'full', desc: '50 DSA problems covering all topics — arrays to graphs.' },
-  { name: 'Aptitude Speed Test', icon: '⏱️', time: '30 min', questions: 30, status: 'done', score: 76, difficulty: 'easy', category: 'topic', desc: 'Quick-fire aptitude questions to test speed and accuracy.' },
-  { name: 'Amazon SDE OA Practice', icon: '🛒', time: '90 min', questions: 4, status: 'new', difficulty: 'hard', category: 'company', desc: '2 coding problems + 2 behavioral questions matching Amazon OA pattern.' },
-  { name: 'DBMS & SQL Fundamentals', icon: '🗄️', time: '45 min', questions: 40, status: 'new', difficulty: 'medium', category: 'topic', desc: 'Normalization, joins, transactions, and query optimization.' },
-  { name: 'Logical Reasoning Challenge', icon: '🧩', time: '60 min', questions: 50, status: 'done', score: 88, difficulty: 'medium', category: 'topic', desc: 'Puzzles, seating arrangement, blood relations, and coding-decoding.' }
-];
+let MOCK_TESTS = [];
 
 // ── FEEDBACK & ADMIN DATA ────────────────────────────────────────────────────
 const FEEDBACKS = [
@@ -596,7 +584,7 @@ async function fetchDrives() {
 
 // ── ADDED QUESTIONS STORE ────────────────────────────────────────────────────
 const ADDED_QUESTIONS = [];
-const CREATED_ASSESSMENTS = [];
+let CREATED_ASSESSMENTS = [];
 
 // ── RENDER ALL ────────────────────────────────────────────────────────────────
 function renderAll() {
@@ -1022,22 +1010,50 @@ function filterTalent() {
     }).join('');
 }
 
-function createAssessment() {
+async function fetchCreatedAssessments() {
+  const userId = currentUser ? currentUser.id : 0;
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/mocktests?userId=${userId}`);
+    if (res.ok) {
+      const data = await res.json();
+      MOCK_TESTS = data;
+      CREATED_ASSESSMENTS = data;
+      renderAll();
+    }
+  } catch (e) {
+    console.error("Failed to fetch assessments", e);
+  }
+}
+
+async function createAssessment() {
   const name = document.getElementById('assess-name')?.value;
-  const duration = document.getElementById('assess-duration')?.value;
+  const duration = document.getElementById('assess-duration')?.value || '45';
   const topicsEl = document.getElementById('assess-topics');
-  const qcount = document.getElementById('assess-qcount')?.value;
+  const qcount = document.getElementById('assess-qcount')?.value || '20';
 
   if (!name) { showToast('Please enter an assessment name'); return; }
 
-  const topics = topicsEl ? Array.from(topicsEl.selectedOptions).map(o => o.value) : [];
+  const topics = topicsEl ? Array.from(topicsEl.selectedOptions).map(o => o.value).join(', ') : 'Mixed';
 
-  CREATED_ASSESSMENTS.push({
-    name, duration: duration || '45', topics, questions: qcount || '20', date: new Date().toLocaleDateString()
-  });
-
-  showToast('Assessment "' + name + '" created and sent to students! 🚀');
-  renderAll();
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/mocktests`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name, duration: parseInt(duration), questions: parseInt(qcount), 
+        difficulty: 'medium', category: topics, desc: 'Custom Assessment created by coordinator.', icon: '📝'
+      })
+    });
+    
+    if(res.ok) {
+      showToast('Assessment "' + name + '" created and sent to students! 🚀');
+      await fetchCreatedAssessments();
+    } else {
+      showToast('Failed to create assessment.');
+    }
+  } catch (e) {
+    showToast('Failed to create assessment due to an error.');
+  }
 }
 
 // ── ROLE-BASED DASHBOARD ─────────────────────────────────────────────────────
@@ -2358,6 +2374,7 @@ document.addEventListener('DOMContentLoaded', function () {
   fetchCompanies();
   fetchDrives();
   fetchCodingProblems();
+  fetchCreatedAssessments();
 
   // Practice modal close on ESC
   document.addEventListener('keydown', (e) => {
