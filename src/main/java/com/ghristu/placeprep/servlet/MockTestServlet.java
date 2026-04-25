@@ -57,8 +57,8 @@ public class MockTestServlet extends HttpServlet {
         try {
             Map<String, Object> payload = gson.fromJson(buffer.toString(), Map.class);
             String name = (String) payload.get("name");
-            int duration = Integer.parseInt(payload.get("duration").toString());
-            int questions = Integer.parseInt(payload.get("questions").toString());
+            int duration = ((Number) payload.get("duration")).intValue();
+            int questions = ((Number) payload.get("questions")).intValue();
             String difficulty = (String) payload.getOrDefault("difficulty", "medium");
             String category = (String) payload.getOrDefault("category", "custom");
             String desc = (String) payload.getOrDefault("desc", "Custom assessment");
