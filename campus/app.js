@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
-const API_BASE_URL = ''; // Set to Railway backend URL when deployed
+const API_BASE_URL = 'https://placement-preparation-production.up.railway.app';
 const ALLOWED_DOMAIN = '@ghristu.edu.in';
 
 // ── COMPANY DATA WITH ROADMAPS ───────────────────────────────────────────────
