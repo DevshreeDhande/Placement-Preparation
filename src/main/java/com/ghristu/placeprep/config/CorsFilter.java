@@ -19,8 +19,8 @@ public class CorsFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        // Allow any origin for development, ideally specify allowed domains in production
-        res.setHeader("Access-Control-Allow-Origin", "*");
+        String allowedOrigin = System.getenv("CLIENT_URL") != null ? System.getenv("CLIENT_URL") : "*";
+        res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         res.setHeader("Access-Control-Allow-Credentials", "true");
