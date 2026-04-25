@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile – GHRISTU PlacePrep</title>
+<meta name="description" content="View and edit your placement preparation profile, skills, certifications, and readiness scores.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div id="app-shell" style="display:flex">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><img src="../logo.png" alt="Logo" style="height:32px;width:32px;object-fit:contain;"/></div>
+      <div class="sidebar-logo-text">PlacePrep<span>GHRISTU · Campus Portal</span></div>
+    </div>
+    <nav>
+      <div class="nav-section"><div class="nav-label">Main</div>
+        <a href="Dashboard.html" class="nav-item"><span class="nav-icon">📊</span>Dashboard</a>
+        <a href="Companies.html" class="nav-item"><span class="nav-icon">🏢</span>Companies</a>
+        <a href="Progress.html" class="nav-item"><span class="nav-icon">📈</span>Progress</a>
+      </div>
+      <div class="nav-section"><div class="nav-label">Practice</div>
+        <a href="Aptitude.html" class="nav-item"><span class="nav-icon">🧠</span>Aptitude</a>
+        <a href="Technical.html" class="nav-item"><span class="nav-icon">💻</span>Technical</a>
+        <a href="Coding.html" class="nav-item"><span class="nav-icon">⌨️</span>Coding</a>
+        <a href="MockTest.html" class="nav-item"><span class="nav-icon">📝</span>Mock Tests<span class="nav-badge">3</span></a>
+      </div>
+      <div class="nav-section"><div class="nav-label">Tools</div>
+        <a href="ResumeBuild.html" class="nav-item"><span class="nav-icon">📄</span>Resume Builder</a>
+        <a href="FeedbackDoubt.html" class="nav-item"><span class="nav-icon">💬</span>Feedback &amp; Doubts</a>
+        <a href="Profile.html" class="nav-item active"><span class="nav-icon">👤</span>Profile</a>
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">—</div>
+      <div class="user-info-text"><div class="user-name" id="sidebar-name">Loading...</div><div class="user-role" id="sidebar-role">—</div></div>
+      <button class="logout-btn" title="Sign out" onclick="handleLogout()">⏻</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar"><div class="topbar-title">Profile</div><div class="topbar-actions"><button class="notification-btn">🔔<span class="notif-dot"></span></button></div></div>
+
+    <div class="Profile active" style="padding:2rem">
+      <div class="profile-container card">
+        <!-- HEADER -->
+        <div class="profile-hdr">
+          <div class="profile-avatar" id="avatarInitials">AR</div>
+          <div class="profile-hdr-info">
+            <h2 id="displayName">Aarav Rane</h2>
+            <p id="displaySub">B.Tech Computer Science · 2025 Batch</p>
+            <span class="profile-badge" id="displayBadge">Open to opportunities</span>
+          </div>
+          <button class="edit-btn-hdr" id="topEditBtn">Edit profile</button>
+        </div>
+
+        <!-- VIEW MODE -->
+        <div class="profile-body view-view" id="viewSection">
+          <div class="profile-sec-title">Academic Information</div>
+          <div class="profile-info-grid">
+            <div class="profile-info-item"><span class="profile-lbl">PRN</span><span class="profile-val" id="vPrn">211010120045</span></div>
+            <div class="profile-info-item"><span class="profile-lbl">CGPA</span><span class="profile-val" id="vCgpa">8.74 / 10</span></div>
+            <div class="profile-info-item"><span class="profile-lbl">Branch</span><span class="profile-val" id="vBranch">Computer Science</span></div>
+            <div class="profile-info-item"><span class="profile-lbl">Email</span><span class="profile-val" id="vEmail">aarav@ghristu.edu</span></div>
+          </div>
+
+          <hr class="profile-divider"/>
+          <div class="profile-sec-title">Placement Stats</div>
+          <div class="profile-stat-row">
+            <div class="profile-stat-card"><div class="profile-stat-num" id="vApplied">12</div><div class="profile-stat-lbl">Companies Applied</div></div>
+            <div class="profile-stat-card"><div class="profile-stat-num" id="vInterviews">5</div><div class="profile-stat-lbl">Interviews</div></div>
+            <div class="profile-stat-card"><div class="profile-stat-num" id="vOffers">2</div><div class="profile-stat-lbl">Offers</div></div>
+          </div>
+
+          <hr class="profile-divider"/>
+          <div class="profile-sec-title">Skills</div>
+          <div class="profile-skills-wrap" id="vSkills"></div>
+
+          <hr class="profile-divider"/>
+          <div class="profile-sec-title">Preparation Readiness</div>
+          <div id="vReadiness"></div>
+
+          <hr class="profile-divider"/>
+          <div class="profile-sec-title">Certifications</div>
+          <div class="profile-cert-list" id="vCerts"></div>
+
+          <div class="profile-action-row">
+            <button class="profile-btn" id="editBtnBottom">✏️ Edit Profile</button>
+            <button class="profile-btn profile-btn-danger" onclick="showToast('Account deletion requires coordinator approval')">🗑 Delete Account</button>
+          </div>
+        </div>
+
+        <!-- EDIT MODE -->
+        <div class="profile-body edit-view" id="editSection">
+          <div class="profile-sec-title">Personal Information</div>
+          <div class="profile-field-row">
+            <div class="profile-field-group"><label>Full Name</label><input id="eName" placeholder="Full Name"/></div>
+            <div class="profile-field-group"><label>PRN</label><input id="ePrn" placeholder="PRN"/></div>
+          </div>
+          <div class="profile-field-row">
+            <div class="profile-field-group"><label>Branch</label><input id="eBranch" placeholder="Branch"/></div>
+            <div class="profile-field-group"><label>Batch</label><input id="eBatch" placeholder="Batch"/></div>
+          </div>
+          <div class="profile-field-row">
+            <div class="profile-field-group"><label>CGPA</label><input id="eCgpa" type="number" step="0.01" min="0" max="10" placeholder="8.74"/></div>
+            <div class="profile-field-group"><label>Email</label><input id="eEmail" type="email" placeholder="Email"/></div>
+          </div>
+
+          <hr class="profile-divider"/>
+          <div class="profile-sec-title">Availability</div>
+          <div class="profile-avail-toggle">
+            <span class="profile-avail-opt" data-val="Open to opportunities">Open to opportunities</span>
+            <span class="profile-avail-opt" data-val="Not looking">Not looking</span>
+            <span class="profile-avail-opt" data-val="Actively interviewing">Actively interviewing</span>
+          </div>
+
+          <hr class="profile-divider"/>
+          <div class="profile-sec-title">Placement Stats</div>
+          <div class="profile-field-row">
+            <div class="profile-field-group"><label>Applied</label><input id="eApplied" type="number" min="0"/></div>
+            <div class="profile-field-group"><label>Interviews</label><input id="eInterviews" type="number" min="0"/></div>
+            <div class="profile-field-group"><label>Offers</label><input id="eOffers" type="number" min="0"/></div>
+          </div>
+
+          <hr class="profile-divider"/>
+          <div class="profile-sec-title">Skills</div>
+          <div class="profile-skills-edit" id="eSkillsWrap"></div>
+          <div class="profile-skill-add-row">
+            <input id="eSkillInput" placeholder="Add a skill..."/>
+            <button id="eAddSkill">+ Add</button>
+          </div>
+
+          <hr class="profile-divider"/>
+          <div class="profile-sec-title">Preparation Readiness</div>
+          <div id="eReadiness"></div>
+
+          <hr class="profile-divider"/>
+          <div class="profile-sec-title">Certifications</div>
+          <div id="eCertList"></div>
+          <button class="profile-add-cert-btn" id="eAddCert">+ Add Certification</button>
+
+          <div class="profile-action-row">
+            <button class="profile-btn" id="cancelBtn">Cancel</button>
+            <button class="profile-btn profile-btn-primary" id="saveBtn">💾 Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="../app.js"></script>
+</body>
+</html>

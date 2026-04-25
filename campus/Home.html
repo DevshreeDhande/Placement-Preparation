@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHRISTU PlacePrep – Login</title>
+<meta name="description" content="GHRISTU PlacePrep – Your exclusive campus placement preparation portal. Login to access aptitude, technical, coding practice and more.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-left">
+    <div class="auth-brand">
+      <div class="auth-logo">
+        <img src="logo.png" alt="GHRISTU" style="height:52px; width:52px; object-fit:contain;" />
+      </div>
+      <h1>GHRISTU<br><span>PlacePrep</span></h1>
+      <p>Your exclusive campus placement preparation portal. Accessible only to verified GHRISTU students.</p>
+    </div>
+    <div class="auth-features">
+      <div class="auth-feat-item"><div class="feat-dot"></div> Aptitude, Technical &amp; Coding practice</div>
+      <div class="auth-feat-item"><div class="feat-dot"></div> Company-wise preparation material</div>
+      <div class="auth-feat-item"><div class="feat-dot"></div> Live mock tests &amp; performance tracking</div>
+      <div class="auth-feat-item"><div class="feat-dot"></div> Resume builder &amp; peer feedback</div>
+      <div class="auth-feat-item"><div class="feat-dot"></div> Direct recruiter connections</div>
+    </div>
+  </div>
+  <div class="auth-right">
+    <div class="auth-box">
+      <h2>Welcome back 👋</h2>
+      <p>Sign in with your GHRISTU college email to continue</p>
+
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+        <button class="tab-btn" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="login-form">
+        <div class="form-group">
+          <label>College Email</label>
+          <input type="email" id="login-email" placeholder="john.doe.cre@ghristu.edu.in" />
+          <div class="email-hint">Use your @ghristu.edu.in email only</div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-pass" placeholder="••••••••" />
+        </div>
+        <div class="auth-error" id="login-error">Invalid email or password. Use your @ghristu.edu.in email.</div>
+        <button class="btn-primary" onclick="handleLogin()">Sign In →</button>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="register-form" style="display:none">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="reg-name" placeholder="John Doe" />
+        </div>
+        <div class="form-group">
+          <label>College Email</label>
+          <input type="email" id="reg-email" placeholder="john.doe.cre@ghristu.edu.in" />
+          <div class="email-hint">Must be @ghristu.edu.in</div>
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select id="reg-role">
+            <option value="student">Student</option>
+            <option value="coordinator">Placement Coordinator</option>
+            <option value="recruiter">Company Recruiter</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="reg-pass" placeholder="Create password" />
+        </div>
+        <div class="auth-error" id="reg-error">Email must end with @ghristu.edu.in</div>
+        <button class="btn-primary" onclick="handleRegister()">Create Account →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const stored = sessionStorage.getItem('ghristu_user');
+    if (stored) {
+      window.location.href = 'pages/Dashboard.html';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Companies – GHRISTU PlacePrep</title>
+<meta name="description" content="Explore company-wise placement preparation roadmaps for TCS, Infosys, Amazon, Google, and more.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div id="app-shell" style="display:flex">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><img src="../logo.png" alt="Logo" style="height:32px;width:32px;object-fit:contain;"/></div>
+      <div class="sidebar-logo-text">PlacePrep<span>GHRISTU · Campus Portal</span></div>
+    </div>
+    <nav>
+      <div class="nav-section"><div class="nav-label">Main</div>
+        <a href="Dashboard.html" class="nav-item"><span class="nav-icon">📊</span>Dashboard</a>
+        <a href="Companies.html" class="nav-item active"><span class="nav-icon">🏢</span>Companies</a>
+        <a href="Progress.html" class="nav-item"><span class="nav-icon">📈</span>Progress</a>
+      </div>
+      <div class="nav-section"><div class="nav-label">Practice</div>
+        <a href="Aptitude.html" class="nav-item"><span class="nav-icon">🧠</span>Aptitude</a>
+        <a href="Technical.html" class="nav-item"><span class="nav-icon">💻</span>Technical</a>
+        <a href="Coding.html" class="nav-item"><span class="nav-icon">⌨️</span>Coding</a>
+        <a href="MockTest.html" class="nav-item"><span class="nav-icon">📝</span>Mock Tests<span class="nav-badge">3</span></a>
+      </div>
+      <div class="nav-section"><div class="nav-label">Tools</div>
+        <a href="ResumeBuild.html" class="nav-item"><span class="nav-icon">📄</span>Resume Builder</a>
+        <a href="FeedbackDoubt.html" class="nav-item"><span class="nav-icon">💬</span>Feedback &amp; Doubts</a>
+        <a href="Profile.html" class="nav-item"><span class="nav-icon">👤</span>Profile</a>
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">—</div>
+      <div class="user-info-text"><div class="user-name" id="sidebar-name">Loading...</div><div class="user-role" id="sidebar-role">—</div></div>
+      <button class="logout-btn" title="Sign out" onclick="handleLogout()">⏻</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar"><div class="topbar-title">Companies</div><div class="topbar-actions"><button class="notification-btn">🔔<span class="notif-dot"></span></button></div></div>
+
+    <div class="page active" id="page-companies" style="padding:2rem">
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Search companies..." oninput="filterCompanies(this.value)" id="company-search" />
+      </div>
+      <div class="filter-row">
+        <span class="filter-chip active" onclick="filterType('all',this)">All</span>
+        <span class="filter-chip" onclick="filterType('tech',this)">Tech</span>
+        <span class="filter-chip" onclick="filterType('finance',this)">Finance</span>
+        <span class="filter-chip" onclick="filterType('product',this)">Product</span>
+      </div>
+      <div class="companies-grid" id="companies-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPANY MODAL -->
+<div class="company-modal" id="companyModal">
+  <div class="company-modal-content">
+    <button class="company-modal-close" id="closeModal">&times;</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="../app.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coding Practice – GHRISTU PlacePrep</title>
+<meta name="description" content="Practice coding problems categorized by topic and difficulty — Arrays, DP, Trees, Graphs, and more.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div id="app-shell" style="display:flex">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><img src="../logo.png" alt="Logo" style="height:32px;width:32px;object-fit:contain;"/></div>
+      <div class="sidebar-logo-text">PlacePrep<span>GHRISTU · Campus Portal</span></div>
+    </div>
+    <nav>
+      <div class="nav-section"><div class="nav-label">Main</div>
+        <a href="Dashboard.html" class="nav-item"><span class="nav-icon">📊</span>Dashboard</a>
+        <a href="Companies.html" class="nav-item"><span class="nav-icon">🏢</span>Companies</a>
+        <a href="Progress.html" class="nav-item"><span class="nav-icon">📈</span>Progress</a>
+      </div>
+      <div class="nav-section"><div class="nav-label">Practice</div>
+        <a href="Aptitude.html" class="nav-item"><span class="nav-icon">🧠</span>Aptitude</a>
+        <a href="Technical.html" class="nav-item"><span class="nav-icon">💻</span>Technical</a>
+        <a href="Coding.html" class="nav-item active"><span class="nav-icon">⌨️</span>Coding</a>
+        <a href="MockTest.html" class="nav-item"><span class="nav-icon">📝</span>Mock Tests<span class="nav-badge">3</span></a>
+      </div>
+      <div class="nav-section"><div class="nav-label">Tools</div>
+        <a href="ResumeBuild.html" class="nav-item"><span class="nav-icon">📄</span>Resume Builder</a>
+        <a href="FeedbackDoubt.html" class="nav-item"><span class="nav-icon">💬</span>Feedback &amp; Doubts</a>
+        <a href="Profile.html" class="nav-item"><span class="nav-icon">👤</span>Profile</a>
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">—</div>
+      <div class="user-info-text"><div class="user-name" id="sidebar-name">Loading...</div><div class="user-role" id="sidebar-role">—</div></div>
+      <button class="logout-btn" title="Sign out" onclick="handleLogout()">⏻</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar"><div class="topbar-title">Coding Practice</div><div class="topbar-actions"><button class="notification-btn">🔔<span class="notif-dot"></span></button></div></div>
+
+    <div class="page active" id="page-coding" style="padding:2rem">
+      <div class="coding-header">
+        <div>
+          <h2 style="font-family:var(--font-head);font-size:1.3rem;font-weight:800;color:var(--primary);margin-bottom:4px">⌨️ Coding Challenges</h2>
+          <p style="font-size:0.85rem;color:var(--muted)">Sharpen your problem-solving skills with curated LeetCode-style problems</p>
+        </div>
+      </div>
+
+      <div class="coding-stats-row" id="coding-stats"></div>
+
+      <div class="search-bar" style="margin-bottom:1rem">
+        <span>🔍</span>
+        <input type="text" placeholder="Search problems..." oninput="renderCoding()" id="coding-search" />
+      </div>
+
+      <div class="filter-row">
+        <span class="filter-chip active" onclick="filterCodingProblems('All Topics', this)">All Topics</span>
+        <span class="filter-chip" onclick="filterCodingProblems('Arrays', this)">Arrays</span>
+        <span class="filter-chip" onclick="filterCodingProblems('Strings', this)">Strings</span>
+        <span class="filter-chip" onclick="filterCodingProblems('Linked List', this)">Linked List</span>
+        <span class="filter-chip" onclick="filterCodingProblems('Trees', this)">Trees</span>
+        <span class="filter-chip" onclick="filterCodingProblems('Graphs', this)">Graphs</span>
+        <span class="filter-chip" onclick="filterCodingProblems('DP', this)">DP</span>
+        <span class="filter-chip" onclick="filterCodingProblems('Stack', this)">Stack</span>
+        <span class="filter-chip" onclick="filterCodingProblems('HashMap', this)">HashMap</span>
+        <span class="filter-chip" onclick="filterCodingProblems('Binary Search', this)">Binary Search</span>
+      </div>
+
+      <div id="coding-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CODING PROBLEM OVERLAY -->
+<div class="practice-overlay" id="practiceOverlay">
+  <div class="practice-container" style="max-width:800px">
+    <div class="practice-header">
+      <div class="practice-header-left">
+        <span class="practice-topic-badge" id="practiceTopicBadge" style="background:#f5f0ff;color:var(--accent)">Topic</span>
+        <span class="practice-level-badge" id="practiceLevelBadge">Level</span>
+      </div>
+      <div class="practice-timer" id="practiceTimer">—</div>
+      <button class="practice-close" onclick="closePractice()">✕</button>
+    </div>
+    <div class="practice-progress-bar"><div class="practice-progress-fill" id="practiceProgressFill" style="width:0%"></div></div>
+    <div class="practice-body" id="practiceBody"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="../app.js"></script>
+</body>
+</html>

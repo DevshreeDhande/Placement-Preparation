@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard – GHRISTU PlacePrep</title>
+<meta name="description" content="Your personalized dashboard for campus placement preparation progress and analytics.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div id="app-shell" style="display:flex">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><img src="../logo.png" alt="Logo" style="height:32px;width:32px;object-fit:contain;"/></div>
+      <div class="sidebar-logo-text">PlacePrep<span>GHRISTU · Campus Portal</span></div>
+    </div>
+    <nav>
+      <div class="nav-section">
+        <div class="nav-label">Main</div>
+        <a href="Dashboard.html" class="nav-item active"><span class="nav-icon">📊</span>Dashboard</a>
+        <a href="Companies.html" class="nav-item"><span class="nav-icon">🏢</span>Companies</a>
+        <a href="Progress.html" class="nav-item"><span class="nav-icon">📈</span>Progress</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Practice</div>
+        <a href="Aptitude.html" class="nav-item"><span class="nav-icon">🧠</span>Aptitude</a>
+        <a href="Technical.html" class="nav-item"><span class="nav-icon">💻</span>Technical</a>
+        <a href="Coding.html" class="nav-item"><span class="nav-icon">⌨️</span>Coding</a>
+        <a href="MockTest.html" class="nav-item"><span class="nav-icon">📝</span>Mock Tests<span class="nav-badge">3</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Tools</div>
+        <a href="ResumeBuild.html" class="nav-item"><span class="nav-icon">📄</span>Resume Builder</a>
+        <a href="FeedbackDoubt.html" class="nav-item"><span class="nav-icon">💬</span>Feedback &amp; Doubts</a>
+        <a href="Profile.html" class="nav-item"><span class="nav-icon">👤</span>Profile</a>
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">—</div>
+      <div class="user-info-text"><div class="user-name" id="sidebar-name">Loading...</div><div class="user-role" id="sidebar-role">—</div></div>
+      <button class="logout-btn" title="Sign out" onclick="handleLogout()">⏻</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-actions"><button class="notification-btn">🔔<span class="notif-dot"></span></button></div>
+    </div>
+
+    <!-- ═══ STUDENT DASHBOARD ═══ -->
+    <div id="student-dashboard" class="role-dashboard page active" style="padding:2rem">
+      <div class="welcome-banner">
+        <h2>Welcome back, <span id="welcome-name">Student</span>! 🎯</h2>
+        <p>You're making great progress. Keep the momentum going!</p>
+        <div class="progress-text">Overall Readiness: <strong>42%</strong></div>
+        <div class="welcome-progress"><div class="welcome-progress-bar" style="width:42%"></div></div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Aptitude Score</div>
+          <div class="stat-value">78%</div>
+          <div class="stat-sub">+5% this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Problems Solved</div>
+          <div class="stat-value">124</div>
+          <div class="stat-sub">32 this month</div>
+        </div>
+        <div class="stat-card accent">
+          <div class="stat-label">Mock Tests</div>
+          <div class="stat-value">12</div>
+          <div class="stat-sub">Avg: 74%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Study Streak</div>
+          <div class="stat-value">14🔥</div>
+          <div class="stat-sub">Best: 21 days</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📚 Continue Practicing</div>
+            <a href="Aptitude.html" class="card-link">View All →</a>
+          </div>
+          <div class="module-list-item" onclick="window.location.href='Aptitude.html'">
+            <div class="mod-icon" style="background:#f5f0ff">🧠</div>
+            <div class="mod-info"><div class="mod-name">Quantitative Aptitude</div><div class="progress-bar-wrap"><div class="progress-bar" style="width:72%;background:var(--accent)"></div></div></div>
+            <div class="mod-pct">72%</div>
+          </div>
+          <div class="module-list-item" onclick="window.location.href='Technical.html'">
+            <div class="mod-icon" style="background:#eff6ff">💻</div>
+            <div class="mod-info"><div class="mod-name">DBMS & SQL</div><div class="progress-bar-wrap"><div class="progress-bar" style="width:55%;background:#3b82f6"></div></div></div>
+            <div class="mod-pct">55%</div>
+          </div>
+          <div class="module-list-item" onclick="window.location.href='Coding.html'">
+            <div class="mod-icon" style="background:#f0fdf4">⌨️</div>
+            <div class="mod-info"><div class="mod-name">Coding Challenges</div><div class="progress-bar-wrap"><div class="progress-bar" style="width:38%;background:#10b981"></div></div></div>
+            <div class="mod-pct">38%</div>
+          </div>
+          <div class="module-list-item" onclick="window.location.href='Technical.html'">
+            <div class="mod-icon" style="background:#fef3c7">🖥️</div>
+            <div class="mod-info"><div class="mod-name">Operating Systems</div><div class="progress-bar-wrap"><div class="progress-bar" style="width:25%;background:#d97706"></div></div></div>
+            <div class="mod-pct">25%</div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:1.5rem">
+            <div class="card-header"><div class="card-title">🕐 Recent Activity</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:var(--accent)"></div><div><div class="activity-text">Completed <strong>TCS NQT Mock Test</strong> with 82% score</div><div class="activity-time">2 hours ago</div></div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:var(--gold)"></div><div><div class="activity-text">Solved <strong>15 quantitative problems</strong> in Aptitude</div><div class="activity-time">Yesterday</div></div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#10b981"></div><div><div class="activity-text">Unlocked <strong>14-day streak</strong> achievement 🔥</div><div class="activity-time">2 days ago</div></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">🎯 Recommended</div></div>
+            <div class="module-list-item" onclick="window.location.href='MockTest.html'">
+              <div class="mod-icon" style="background:#fef3c7">📝</div>
+              <div class="mod-info"><div class="mod-name">Infosys Aptitude Mock</div><div style="font-size:0.75rem;color:var(--muted)">Based on your weak areas</div></div>
+            </div>
+            <div class="module-list-item" onclick="window.location.href='Technical.html'">
+              <div class="mod-icon" style="background:#eff6ff">💡</div>
+              <div class="mod-info"><div class="mod-name">OS Concepts Review</div><div style="font-size:0.75rem;color:var(--muted)">Score below target</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COORDINATOR DASHBOARD ═══ -->
+    <div id="coordinator-dashboard" class="role-dashboard page" style="padding:2rem">
+      <div class="welcome-banner" style="background:linear-gradient(135deg,#0f172a 0%,#334155 60%,#475569 100%)">
+        <h2>Coordinator Panel 📋</h2>
+        <p>Monitor student progress, track placement readiness, and manage preparation activities.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Total Students</div><div class="stat-value">248</div><div class="stat-sub">Active on platform</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Readiness</div><div class="stat-value">72%</div><div class="stat-sub">+3% this month</div></div>
+        <div class="stat-card accent"><div class="stat-label">Tests Taken Today</div><div class="stat-value">45</div><div class="stat-sub">Peak: 2-4 PM</div></div>
+        <div class="stat-card"><div class="stat-label">Companies Visiting</div><div class="stat-value">8</div><div class="stat-sub">Next: TCS on 25th</div></div>
+      </div>
+
+      <div class="coord-grid">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🏆 Student Rankings — Overall Performance</div></div>
+          <table class="student-rank-table">
+            <thead><tr><th>#</th><th>Student</th><th>Score</th><th>Strengths / Weaknesses</th><th>Tests</th><th>Streak</th></tr></thead>
+            <tbody id="coord-student-table"></tbody>
+          </table>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:1.5rem">
+            <div class="card-header"><div class="card-title">📊 Branch-wise Performance</div></div>
+            <div style="margin-bottom:1rem">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:0.82rem;font-weight:500">CSE</span><span style="font-size:0.78rem;font-weight:700;color:var(--primary)">82%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:82%;background:var(--accent)"></div></div>
+            </div>
+            <div style="margin-bottom:1rem">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:0.82rem;font-weight:500">IT</span><span style="font-size:0.78rem;font-weight:700;color:var(--primary)">75%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:75%;background:#3b82f6"></div></div>
+            </div>
+            <div style="margin-bottom:1rem">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:0.82rem;font-weight:500">ECE</span><span style="font-size:0.78rem;font-weight:700;color:var(--primary)">68%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:68%;background:#10b981"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:0.82rem;font-weight:500">Mechanical</span><span style="font-size:0.78rem;font-weight:700;color:var(--primary)">58%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:58%;background:#d97706"></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">⚠️ Students Needing Attention</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#ef4444"></div><div><div class="activity-text"><strong>Karan Patil</strong> — inactive for 5 days, score below 50% in aptitude</div></div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#f59e0b"></div><div><div class="activity-text"><strong>Riya Agarwal</strong> — coding score at 65%, needs DSA practice</div></div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#f59e0b"></div><div><div class="activity-text"><strong>Nikhil Rao</strong> — low engagement, only 4-day streak</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ RECRUITER DASHBOARD ═══ -->
+    <div id="recruiter-dashboard" class="role-dashboard page" style="padding:2rem">
+      <div class="recruiter-banner">
+        <h2>Recruiter Talent Board 🏢</h2>
+        <p>Discover top-performing students, view skill profiles, and connect directly.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Top Candidates</div><div class="stat-value">10</div><div class="stat-sub">Score > 75%</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Student Score</div><div class="stat-value">80.6</div><div class="stat-sub">Campus-wide</div></div>
+        <div class="stat-card accent"><div class="stat-label">Active Students</div><div class="stat-value">248</div><div class="stat-sub">This semester</div></div>
+        <div class="stat-card"><div class="stat-label">Response Rate</div><div class="stat-value">92%</div><div class="stat-sub">Within 24h</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:1.5rem">
+        <div class="card-header">
+          <div class="card-title">🏆 Gamified Student Rankings</div>
+          <button class="btn-sm" onclick="showToast('Exporting ranking data...')">📥 Export CSV</button>
+        </div>
+        <div id="recruiter-rankings"></div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="../app.js"></script>
+</body>
+</html>

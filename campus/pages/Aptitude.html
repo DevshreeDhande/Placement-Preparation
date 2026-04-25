@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aptitude Practice – GHRISTU PlacePrep</title>
+<meta name="description" content="Practice Quantitative Aptitude, Logical Reasoning, Verbal Ability, and Data Interpretation with instant feedback.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div id="app-shell" style="display:flex">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon"><img src="../logo.png" alt="Logo" style="height:32px;width:32px;object-fit:contain;"/></div>
+      <div class="sidebar-logo-text">PlacePrep<span>GHRISTU · Campus Portal</span></div>
+    </div>
+    <nav>
+      <div class="nav-section"><div class="nav-label">Main</div>
+        <a href="Dashboard.html" class="nav-item"><span class="nav-icon">📊</span>Dashboard</a>
+        <a href="Companies.html" class="nav-item"><span class="nav-icon">🏢</span>Companies</a>
+        <a href="Progress.html" class="nav-item"><span class="nav-icon">📈</span>Progress</a>
+      </div>
+      <div class="nav-section"><div class="nav-label">Practice</div>
+        <a href="Aptitude.html" class="nav-item active"><span class="nav-icon">🧠</span>Aptitude</a>
+        <a href="Technical.html" class="nav-item"><span class="nav-icon">💻</span>Technical</a>
+        <a href="Coding.html" class="nav-item"><span class="nav-icon">⌨️</span>Coding</a>
+        <a href="MockTest.html" class="nav-item"><span class="nav-icon">📝</span>Mock Tests<span class="nav-badge">3</span></a>
+      </div>
+      <div class="nav-section"><div class="nav-label">Tools</div>
+        <a href="ResumeBuild.html" class="nav-item"><span class="nav-icon">📄</span>Resume Builder</a>
+        <a href="FeedbackDoubt.html" class="nav-item"><span class="nav-icon">💬</span>Feedback &amp; Doubts</a>
+        <a href="Profile.html" class="nav-item"><span class="nav-icon">👤</span>Profile</a>
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">—</div>
+      <div class="user-info-text"><div class="user-name" id="sidebar-name">Loading...</div><div class="user-role" id="sidebar-role">—</div></div>
+      <button class="logout-btn" title="Sign out" onclick="handleLogout()">⏻</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar"><div class="topbar-title">Aptitude Practice</div><div class="topbar-actions"><button class="notification-btn">🔔<span class="notif-dot"></span></button></div></div>
+
+    <div class="page active" id="page-aptitude" style="padding:2rem">
+      <div style="margin-bottom:1.5rem">
+        <h2 style="font-family:var(--font-head);font-size:1.3rem;font-weight:800;color:var(--primary);margin-bottom:4px">🧠 Aptitude Preparation</h2>
+        <p style="font-size:0.85rem;color:var(--muted)">Build a strong foundation with timed practice, instant feedback, and detailed solutions</p>
+      </div>
+
+      <div class="prep-grid">
+        <!-- Quantitative Aptitude -->
+        <div class="prep-card aptitude-quant">
+          <div class="prep-icon">📐</div>
+          <div class="prep-title">Quantitative Aptitude</div>
+          <div class="prep-desc">Percentages, profit/loss, time & work, averages, number systems, and more.</div>
+          <div class="prep-level-row">
+            <span class="prep-level-chip beginner">4 Beginner</span>
+            <span class="prep-level-chip moderate">10 Moderate</span>
+            <span class="prep-level-chip advanced">20 Advanced</span>
+          </div>
+          <div class="prep-meta"><span>📊 34 Questions</span><span>⏱ 90s per question</span></div>
+          <button class="start-btn btn-aptitude" onclick="startPractice('Quantitative Aptitude','aptitude')">Start Practice →</button>
+        </div>
+
+        <!-- Logical Reasoning -->
+        <div class="prep-card aptitude-logic">
+          <div class="prep-icon">🧩</div>
+          <div class="prep-title">Logical Reasoning</div>
+          <div class="prep-desc">Coding-decoding, series, puzzles, blood relations, seating arrangements.</div>
+          <div class="prep-level-row">
+            <span class="prep-level-chip beginner">4 Beginner</span>
+            <span class="prep-level-chip moderate">10 Moderate</span>
+            <span class="prep-level-chip advanced">20 Advanced</span>
+          </div>
+          <div class="prep-meta"><span>📊 34 Questions</span><span>⏱ 90s per question</span></div>
+          <button class="start-btn btn-aptitude" onclick="startPractice('Logical Reasoning','aptitude')">Start Practice →</button>
+        </div>
+
+        <!-- Verbal Ability -->
+        <div class="prep-card aptitude-verbal">
+          <div class="prep-icon">📖</div>
+          <div class="prep-title">Verbal Ability</div>
+          <div class="prep-desc">Synonyms, antonyms, grammar, reading comprehension, sentence correction.</div>
+          <div class="prep-level-row">
+            <span class="prep-level-chip beginner">4 Beginner</span>
+            <span class="prep-level-chip moderate">10 Moderate</span>
+            <span class="prep-level-chip advanced">20 Advanced</span>
+          </div>
+          <div class="prep-meta"><span>📊 34 Questions</span><span>⏱ 90s per question</span></div>
+          <button class="start-btn btn-aptitude" onclick="startPractice('Verbal Ability','aptitude')">Start Practice →</button>
+        </div>
+
+        <!-- Data Interpretation -->
+        <div class="prep-card aptitude-data">
+          <div class="prep-icon">📊</div>
+          <div class="prep-title">Data Interpretation</div>
+          <div class="prep-desc">Pie charts, bar graphs, tables, line graphs, data sufficiency.</div>
+          <div class="prep-level-row">
+            <span class="prep-level-chip beginner">4 Beginner</span>
+            <span class="prep-level-chip moderate">10 Moderate</span>
+            <span class="prep-level-chip advanced">20 Advanced</span>
+          </div>
+          <div class="prep-meta"><span>📊 34 Questions</span><span>⏱ 90s per question</span></div>
+          <button class="start-btn btn-aptitude" onclick="startPractice('Data Interpretation','aptitude')">Start Practice →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRACTICE MODAL -->
+<div class="practice-overlay" id="practiceOverlay">
+  <div class="practice-container">
+    <div class="practice-header">
+      <div class="practice-header-left">
+        <span class="practice-topic-badge" id="practiceTopicBadge" style="background:#f5f0ff;color:var(--accent)">Topic</span>
+        <span class="practice-level-badge" id="practiceLevelBadge">Level</span>
+      </div>
+      <div class="practice-timer" id="practiceTimer">1:30</div>
+      <button class="practice-close" onclick="closePractice()">✕</button>
+    </div>
+    <div class="practice-progress-bar"><div class="practice-progress-fill" id="practiceProgressFill" style="width:0%"></div></div>
+    <div class="practice-body" id="practiceBody"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="../app.js"></script>
+</body>
+</html>
