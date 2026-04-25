@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <display-name>GHRISTU PlacePrep API</display-name>
+
+    <!-- CORS Filter -->
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>com.ghristu.placeprep.config.CorsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Auth Filter -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.ghristu.placeprep.util.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/api/dashboard/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/api/progress/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/api/resume/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Auth Servlet -->
+    <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.AuthServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/api/auth/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Company Servlet -->
+    <servlet>
+        <servlet-name>CompanyServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.CompanyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CompanyServlet</servlet-name>
+        <url-pattern>/api/companies/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Question Servlet -->
+    <servlet>
+        <servlet-name>QuestionServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.QuestionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>QuestionServlet</servlet-name>
+        <url-pattern>/api/questions/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- MockTest Servlet -->
+    <servlet>
+        <servlet-name>MockTestServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.MockTestServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MockTestServlet</servlet-name>
+        <url-pattern>/api/mocktests/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Coding Servlet -->
+    <servlet>
+        <servlet-name>CodingServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.CodingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CodingServlet</servlet-name>
+        <url-pattern>/api/coding/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Progress Servlet -->
+    <servlet>
+        <servlet-name>ProgressServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.ProgressServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProgressServlet</servlet-name>
+        <url-pattern>/api/progress/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Dashboard Servlet -->
+    <servlet>
+        <servlet-name>DashboardServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.DashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DashboardServlet</servlet-name>
+        <url-pattern>/api/dashboard/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Feedback Servlet -->
+    <servlet>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.FeedbackServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <url-pattern>/api/feedback/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Resume Servlet -->
+    <servlet>
+        <servlet-name>ResumeServlet</servlet-name>
+        <servlet-class>com.ghristu.placeprep.servlet.ResumeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResumeServlet</servlet-name>
+        <url-pattern>/api/resume/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Session config -->
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+</web-app>

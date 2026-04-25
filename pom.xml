@@ -54,8 +54,8 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
                 <configuration>
-                    <!-- Point war source to the 'campus' folder containing front-end files -->
-                    <warSourceDirectory>campus</warSourceDirectory>
+                    <!-- Backend-only WAR: no frontend files -->
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
