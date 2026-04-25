@@ -11,7 +11,7 @@ import java.util.Map;
 public class UserDAO {
 
     public Map<String, Object> getUserByEmail(String email) {
-        String query = "SELECT id, full_name, email, role, phone_number, is_active FROM users WHERE email = ?";
+        String query = "SELECT id, name, email, role, phone, is_active FROM users WHERE email = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             
@@ -21,10 +21,10 @@ public class UserDAO {
             if (rs.next()) {
                 Map<String, Object> user = new HashMap<>();
                 user.put("id", rs.getString("id"));
-                user.put("name", rs.getString("full_name"));
+                user.put("name", rs.getString("name"));
                 user.put("email", rs.getString("email"));
                 user.put("role", rs.getString("role"));
-                user.put("phone", rs.getString("phone_number"));
+                user.put("phone", rs.getString("phone"));
                 user.put("isActive", rs.getBoolean("is_active"));
                 return user;
             }
@@ -53,7 +53,7 @@ public class UserDAO {
     }
 
     public boolean registerUser(String email, String name, String role, String plaintextPassword) {
-        String query = "INSERT INTO users (full_name, email, role, password_hash) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO users (name, email, role, password_hash) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             
